@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Case study: 60 GHz radar gesture recognition on PSoC 6.">
+  <meta name="description" content="Case study: 60 GHz radar gesture recognition on PSoC 6 for Project Infineon-X.">
   <title>Radar Gesture Recognition | Jay</title>
   <link rel="stylesheet" href="../styles.css">
 </head>
@@ -11,42 +11,57 @@
   <main>
     <div class="section-shell case-hero">
       <a class="back-link" href="../index.html#projects">← Back to projects</a>
-      <p class="eyebrow">Embedded ML · Radar sensing</p>
+      <p class="eyebrow">Embedded ML · Radar sensing · Project Infineon-X</p>
       <h1>60 GHz Radar Gesture Recognition</h1>
       <p class="hero-copy">
-        Adapting an Infineon PSoC 6 radar gesture-recognition example into an interface that could trigger and communicate with a larger embedded system.
+        A radar-based gesture input subsystem for Project Infineon-X, an assistive facial-recognition system. I adapted an Infineon PSoC 6 radar example, trained a custom swipe gesture, and exposed gesture detections to the rest of the system through GPIO and UART.
       </p>
       <div class="hero-actions">
-        <a class="button primary" href="https://github.com/firefly10000001/PSOC-Trigger1" target="_blank" rel="noreferrer">View repository ↗</a>
+        <a class="button primary" href="https://github.com/firefly10000001/PSOC-Trigger1" target="_blank" rel="noreferrer">Radar repository ↗</a>
+        <a class="button secondary" href="https://github.com/Infineon-X/infineon-x" target="_blank" rel="noreferrer">Full Infineon-X project ↗</a>
       </div>
     </div>
 
     <article class="section-shell case-content">
       <section>
-        <p class="eyebrow">Problem</p>
-        <h2>Turn gesture classification into a usable system signal.</h2>
+        <p class="eyebrow">System context</p>
+        <h2>One subsystem in a larger assistive platform.</h2>
         <p>
-          The starting point was an Infineon DEEPCRAFT radar deployment example for a PSoC 6 AI Evaluation Kit. The example could classify gestures from the XENSIV 60 GHz radar sensor, but a larger embedded system still needed a clean way to react to those detections.
+          The radar work was developed as part of Project Infineon-X, a team-built facial-recognition platform that combines model training and inference, a single-board-computer client, and a web control surface. The PSoC radar subsystem provided a hands-free gesture input path for controlling or triggering behavior elsewhere in that system.
+        </p>
+        <p>
+          Separating gesture recognition into its own embedded subsystem meant the rest of the platform did not need to receive or process raw radar data. Instead, it could react to simple event signals produced by the PSoC.
+        </p>
+      </section>
+
+      <section>
+        <p class="eyebrow">Problem</p>
+        <h2>Turn radar inference into a useful system input.</h2>
+        <p>
+          The starting point was Infineon's DEEPCRAFT radar deployment example for the PSoC 6 AI Evaluation Kit. It demonstrated gesture classification using the XENSIV 60 GHz radar sensor, but the larger Infineon-X system needed a clean interface for reacting to those detections and a gesture set tailored to the intended interaction.
         </p>
       </section>
 
       <section>
         <p class="eyebrow">My contribution</p>
-        <h2>Embedded integration</h2>
+        <h2>Firmware integration and custom gesture training</h2>
         <ul>
           <li>Modified the application behavior around detected gestures.</li>
           <li>Added a GPIO output that can act as a hardware trigger for another device.</li>
           <li>Added UART output for communicating detected events digitally.</li>
           <li>Configured the required PSoC GPIO resources.</li>
-          <li>Integrated the radar gesture stage into a broader wearable-system concept.</li>
+          <li>Collected and labeled radar data for a new swipe gesture.</li>
+          <li>Trained and exported a DEEPCRAFT model containing the custom swipe class.</li>
+          <li>Integrated the new model into the PSoC firmware and tested it on the physical radar hardware.</li>
+          <li>Integrated the radar gesture stage into the broader Infineon-X system concept.</li>
         </ul>
       </section>
 
       <section>
         <p class="eyebrow">Architecture</p>
-        <h2>Signal flow</h2>
-        <div class="architecture">XENSIV 60 GHz Radar
-        │
+        <h2>Gesture signal flow</h2>
+        <div class="architecture">XENSIV BGT60TR13C 60 GHz Radar
+        │ SPI
         ▼
 PSoC 6 AI Evaluation Kit
         │
@@ -54,14 +69,51 @@ PSoC 6 AI Evaluation Kit
 Radar sampling / preprocessing
         │
         ▼
-DEEPCRAFT ML inference
+Custom DEEPCRAFT ML model
         │
         ▼
 Gesture classification
         │
-        ├────────► GPIO trigger
+        ├────────► GPIO trigger ───────┐
+        │                              │
+        └────────► UART event ─────────┤
+                                       ▼
+                              Infineon-X system</div>
+      </section>
+
+      <section>
+        <p class="eyebrow">Embedded ML</p>
+        <h2>Training a custom swipe gesture</h2>
+        <p>
+          The stock example included gestures such as push and circle. Rather than limiting the interaction design to the vendor-provided classes, I collected application-specific radar samples for a swipe motion and labeled them alongside contrasting gesture and non-gesture examples.
+        </p>
+        <p>
+          I used the expanded dataset to train a new classifier in DEEPCRAFT Studio, exported the embedded model, replaced the model files in the ModusToolbox project, and flashed the result to the PSoC 6 for real-time testing. This created an end-to-end workflow from physical motion and radar data collection through model training, embedded deployment, and hardware validation.
+        </p>
+        <div class="architecture">Perform swipe gestures
         │
-        └────────► UART event output</div>
+        ▼
+Capture + label radar samples
+        │
+        ▼
+Train DEEPCRAFT classifier
+        │
+        ▼
+Export embedded model
+        │
+        ▼
+Integrate into PSoC firmware
+        │
+        ▼
+Flash + validate on hardware</div>
+      </section>
+
+      <section>
+        <p class="eyebrow">Why this architecture</p>
+        <h2>Keep radar-specific work at the edge.</h2>
+        <p>
+          Running acquisition and classification on the PSoC keeps raw radar processing local to the sensor subsystem. The larger project only needs to understand a simple GPIO trigger or UART event rather than the radar data format, preprocessing pipeline, or ML implementation.
+        </p>
       </section>
 
       <section>
@@ -72,17 +124,30 @@ Gesture classification
           <li>Infineon XENSIV 60 GHz Radar</li>
           <li>C</li>
           <li>ModusToolbox</li>
-          <li>DEEPCRAFT</li>
+          <li>DEEPCRAFT Studio</li>
+          <li>Embedded ML</li>
           <li>UART</li>
           <li>GPIO</li>
         </ul>
       </section>
 
       <section>
+        <p class="eyebrow">Related work</p>
+        <h2>Project Infineon-X</h2>
+        <p>
+          The complete team project includes the facial-recognition backend and model-training stack, SBC client software, and web interface. The radar repository documents the PSoC-side gesture subsystem in more detail, while the Infineon-X repository shows the wider system it was designed to support.
+        </p>
+        <div class="card-links">
+          <a href="https://github.com/Infineon-X/infineon-x" target="_blank" rel="noreferrer">View full project repository ↗</a>
+          <a href="https://github.com/Infineon-X" target="_blank" rel="noreferrer">View team organization ↗</a>
+        </div>
+      </section>
+
+      <section>
         <p class="eyebrow">Next revision</p>
         <h2>What I’d improve</h2>
         <p>
-          The next version of this case study will document the full wearable-system interface, include hardware photos and diagrams, and show the gesture event path end-to-end rather than only the radar-side firmware.
+          I would add quantitative per-gesture accuracy and false-trigger measurements, characterize detection latency, expand the swipe dataset across users and gesture conditions, and document the full gesture-event path from the PSoC through the downstream Infineon-X hardware and software.
         </p>
       </section>
     </article>
