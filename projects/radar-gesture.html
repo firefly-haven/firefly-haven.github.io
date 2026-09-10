@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Case study: 60 GHz radar gesture recognition on PSoC 6.">
+  <title>Radar Gesture Recognition | Jay</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <main>
+    <div class="section-shell case-hero">
+      <a class="back-link" href="../index.html#projects">← Back to projects</a>
+      <p class="eyebrow">Embedded ML · Radar sensing</p>
+      <h1>60 GHz Radar Gesture Recognition</h1>
+      <p class="hero-copy">
+        Adapting an Infineon PSoC 6 radar gesture-recognition example into an interface that could trigger and communicate with a larger embedded system.
+      </p>
+      <div class="hero-actions">
+        <a class="button primary" href="https://github.com/firefly10000001/PSOC-Trigger1" target="_blank" rel="noreferrer">View repository ↗</a>
+      </div>
+    </div>
+
+    <article class="section-shell case-content">
+      <section>
+        <p class="eyebrow">Problem</p>
+        <h2>Turn gesture classification into a usable system signal.</h2>
+        <p>
+          The starting point was an Infineon DEEPCRAFT radar deployment example for a PSoC 6 AI Evaluation Kit. The example could classify gestures from the XENSIV 60 GHz radar sensor, but a larger embedded system still needed a clean way to react to those detections.
+        </p>
+      </section>
+
+      <section>
+        <p class="eyebrow">My contribution</p>
+        <h2>Embedded integration</h2>
+        <ul>
+          <li>Modified the application behavior around detected gestures.</li>
+          <li>Added a GPIO output that can act as a hardware trigger for another device.</li>
+          <li>Added UART output for communicating detected events digitally.</li>
+          <li>Configured the required PSoC GPIO resources.</li>
+          <li>Integrated the radar gesture stage into a broader wearable-system concept.</li>
+        </ul>
+      </section>
+
+      <section>
+        <p class="eyebrow">Architecture</p>
+        <h2>Signal flow</h2>
+        <div class="architecture">XENSIV 60 GHz Radar
+        │
+        ▼
+PSoC 6 AI Evaluation Kit
+        │
+        ▼
+Radar sampling / preprocessing
+        │
+        ▼
+DEEPCRAFT ML inference
+        │
+        ▼
+Gesture classification
+        │
+        ├────────► GPIO trigger
+        │
+        └────────► UART event output</div>
+      </section>
+
+      <section>
+        <p class="eyebrow">Tools</p>
+        <h2>Hardware & software</h2>
+        <ul class="tags">
+          <li>PSoC 6</li>
+          <li>Infineon XENSIV 60 GHz Radar</li>
+          <li>C</li>
+          <li>ModusToolbox</li>
+          <li>DEEPCRAFT</li>
+          <li>UART</li>
+          <li>GPIO</li>
+        </ul>
+      </section>
+
+      <section>
+        <p class="eyebrow">Next revision</p>
+        <h2>What I’d improve</h2>
+        <p>
+          The next version of this case study will document the full wearable-system interface, include hardware photos and diagrams, and show the gesture event path end-to-end rather than only the radar-side firmware.
+        </p>
+      </section>
+    </article>
+  </main>
+</body>
+</html>
