@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Jay's electrical engineering and embedded systems portfolio.">
+  <title>Jay | Electrical Engineering & Embedded Systems</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Home">J<span>.</span></a>
+    <nav aria-label="Primary navigation">
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#about">About</a>
+      <a href="https://github.com/firefly10000001" target="_blank" rel="noreferrer">GitHub ↗</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero section-shell">
+      <p class="eyebrow">Electrical Engineering · Embedded Systems · Mechatronics</p>
+      <h1>I build systems where <span>hardware and software meet.</span></h1>
+      <p class="hero-copy">
+        I'm Jay, an electrical engineering student interested in embedded systems, sensing,
+        electronics design, mechatronics, and edge computing. I like turning ideas into
+        working prototypes—and understanding why they work.
+      </p>
+      <div class="hero-actions">
+        <a class="button primary" href="#projects">See my work</a>
+        <a class="button secondary" href="https://github.com/firefly10000001" target="_blank" rel="noreferrer">View GitHub</a>
+      </div>
+      <div class="hero-stats" aria-label="Focus areas">
+        <div><strong>Embedded</strong><span>Firmware & interfaces</span></div>
+        <div><strong>Electronics</strong><span>Circuits & PCB design</span></div>
+        <div><strong>Fabrication</strong><span>CAD & prototyping</span></div>
+      </div>
+    </section>
+
+    <section id="projects" class="section-shell section-block">
+      <div class="section-heading">
+        <p class="eyebrow">Selected work</p>
+        <h2>Projects</h2>
+        <p>Projects are documented around the problem, my contribution, implementation, and lessons learned.</p>
+      </div>
+
+      <div class="project-grid">
+        <article class="project-card featured">
+          <div class="project-index">01</div>
+          <div class="project-body">
+            <p class="project-type">Embedded ML · Radar sensing</p>
+            <h3>60 GHz Radar Gesture Recognition</h3>
+            <p>
+              Adapted a PSoC 6 and Infineon XENSIV radar gesture-recognition pipeline for use in a larger embedded system,
+              adding GPIO signaling and UART output for detected gestures.
+            </p>
+            <ul class="tags" aria-label="Technologies">
+              <li>PSoC 6</li><li>C</li><li>60 GHz Radar</li><li>UART</li><li>GPIO</li><li>Embedded ML</li>
+            </ul>
+            <div class="card-links">
+              <a href="projects/radar-gesture.html">Case study →</a>
+              <a href="https://github.com/firefly10000001/PSOC-Trigger1" target="_blank" rel="noreferrer">Repository ↗</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <div class="project-index">02</div>
+          <div class="project-body">
+            <p class="project-type">Assistive technology · Team project</p>
+            <h3>Wearable Recognition System</h3>
+            <p>
+              A wearable facial-recognition assistive device with radar-based gesture activation. I served as project manager
+              and contributed to system architecture, gesture integration, CAD, and power-system design.
+            </p>
+            <ul class="tags"><li>Embedded Systems</li><li>Computer Vision</li><li>Radar</li><li>Power</li><li>CAD</li></ul>
+            <p class="status">Case study in progress</p>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <div class="project-index">03</div>
+          <div class="project-body">
+            <p class="project-type">Electronics design · Education</p>
+            <h3>Educational Electronics Hardware</h3>
+            <p>
+              Circuit and PCB development for hands-on physics, chemistry, and circuit-analysis learning modules—from simulation
+              and component selection through layout, fabrication, and supporting lesson material.
+            </p>
+            <ul class="tags"><li>Circuit Design</li><li>PCB Layout</li><li>Simulation</li><li>Fabrication</li></ul>
+            <p class="status">Case study in progress</p>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <div class="project-index">04</div>
+          <div class="project-body">
+            <p class="project-type">Embedded Linux · Human interface</p>
+            <h3>Interactive Projection System</h3>
+            <p>
+              A compact interactive projection system using a Raspberry Pi, IMU sensing, and a small projector on an articulated arm,
+              inspired by the Android Things Lantern concept.
+            </p>
+            <ul class="tags"><li>Raspberry Pi</li><li>IMU</li><li>Linux</li><li>Mechanical Design</li></ul>
+            <p class="status">Prototype in progress</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="skills" class="section-shell section-block skills-section">
+      <div class="section-heading">
+        <p class="eyebrow">Toolbox</p>
+        <h2>Skills & technologies</h2>
+      </div>
+      <div class="skill-grid">
+        <div class="skill-group">
+          <h3>Embedded & Electronics</h3>
+          <p>C / C++ · Microcontrollers · PSoC · Raspberry Pi · UART · SPI · I²C · Sensors · Circuit Analysis · PCB Design</p>
+        </div>
+        <div class="skill-group">
+          <h3>Software & Computing</h3>
+          <p>Python · Linux · Git · Docker · Embedded Linux · Local AI / ML workflows</p>
+        </div>
+        <div class="skill-group">
+          <h3>Design & Fabrication</h3>
+          <p>CAD · 3D Printing · CNC Machining · Laser Cutting · Electronics Prototyping</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section-shell section-block about-section">
+      <div class="section-heading">
+        <p class="eyebrow">About</p>
+        <h2>Engineer, builder, learner.</h2>
+      </div>
+      <div class="about-copy">
+        <p>
+          My projects tend to span disciplines: firmware talks to sensors, mechanical parts hold electronics, and software turns the whole thing into a usable system.
+          I’m especially interested in embedded systems, mechatronics, intelligent sensing, PCB design, and edge AI.
+        </p>
+        <p>
+          This portfolio is intentionally focused on process as much as finished results: architecture, tradeoffs, failures, debugging, and what I would change in the next revision.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer section-shell">
+    <p>Built by Jay · Hosted on GitHub Pages</p>
+    <a href="https://github.com/firefly10000001" target="_blank" rel="noreferrer">github.com/firefly10000001 ↗</a>
+  </footer>
+</body>
+</html>
