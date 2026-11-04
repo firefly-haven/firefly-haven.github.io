@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Case study: 8-channel 100 MS/s SUMP-compatible Spartan-6 logic analyzer built on the Mojo V2 FPGA board.">
+  <title>Mojo V2 FPGA Logic Analyzer | Jay</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <main>
+    <div class="section-shell case-hero">
+      <a class="back-link" href="../index.html#projects">← Back to projects</a>
+      <p class="eyebrow">FPGA · Verilog RTL · Hardware validation</p>
+      <h1>Mojo V2 Logic Analyzer</h1>
+      <p class="hero-copy">
+        I converted a Spartan-6 Mojo V2 development board into an eight-channel, 100 MS/s
+        digital logic analyzer compatible with PulseView. The project covers capture RTL,
+        configurable hardware triggers, a SUMP protocol interface, simulation, and
+        real-hardware validation with an STM32 signal source.
+      </p>
+      <div class="hero-actions">
+        <a class="button primary" href="https://github.com/firefly-haven/mojo-v2-logic-analyzer" target="_blank" rel="noreferrer">View source and tests ↗</a>
+        <a class="button secondary" href="https://github.com/firefly-haven/mojo-v2-logic-analyzer#measured-results" target="_blank" rel="noreferrer">Measured results ↗</a>
+      </div>
+    </div>
+
+    <article class="section-shell case-content">
+      <section>
+        <p class="eyebrow">Measured on hardware</p>
+        <h2>Results beyond simulation</h2>
+        <p>
+          I validated captures using a NUCLEO-L476RG generating known signals. UART
+          at 115200 baud decoded correctly at 2 MS/s; SPI at 1.25, 2.5, 5, and 10 MHz
+          decoded at 50 MS/s; and the 1 MHz timer signal measured a 1000 ns period
+          at 100 MS/s. A 65,536-sample counter capture had zero sequence breaks across
+          rates from 2 to 100 MS/s.
+        </p>
+        <p>
+          Sparse-signal run-length compression captured approximately 1.10 seconds
+          at 2 MS/s—about 34× the raw uncompressed window for that test signal.
+          This is workload-dependent, not a guaranteed improvement for dense traffic.
+        </p>
+        <figure style="margin: 1.5rem 0;">
+          <img src="https://raw.githubusercontent.com/firefly-haven/mojo-v2-logic-analyzer/main/docs/images/pulseview-capture.png"
+               alt="PulseView waveform capture from the Mojo FPGA, showing decoded UART and other test channels"
+               style="display:block;max-width:100%;height:auto;border:1px solid var(--line);border-radius:0.8rem;">
+          <figcaption style="margin-top:0.65rem;color:var(--muted);font-size:0.9rem;">PulseView capture from the project’s documented hardware tests.</figcaption>
+        </figure>
+      </section>
+
+      <section>
+        <p class="eyebrow">Implementation</p>
+        <h2>Capture hardware with an existing software frontend</h2>
+        <p>
+          The FPGA samples eight digital inputs into block RAM, with up to 65,536
+          raw samples, and implements up to four sequential value-and-mask trigger
+          stages. Run-length compression extends captures for signals with long
+          idle periods. A SUMP-compatible interface lets PulseView handle
+          acquisition control, visualization, and protocol decoding.
+        </p>
+        <div class="architecture">STM32 / target digital signals
+        │  8 × 3.3 V inputs
+        ▼
+Mojo V2 / Spartan-6 FPGA
+        │ sampling + trigger + capture
+        ▼
+On-chip block RAM / optional compression
+        │ SUMP protocol over the board link
+        ▼
+PulseView on Linux
+        │ UART / SPI decoding and waveforms
+        ▼
+Debugging and validation</div>
+      </section>
+
+      <section>
+        <p class="eyebrow">Engineering tradeoffs</p>
+        <h2>Throughput and timing constraints</h2>
+        <p>
+          The fixed 500 kbaud microcontroller-to-host serial link sustains
+          approximately 45.5 KB/s, so a full capture takes around 1.6 seconds
+          to download; this is capture-then-transfer, not live streaming.
+          The top advertised PulseView sampling option exceeds the FPGA design’s
+          actual 100 MS/s maximum. The repository documents these limits,
+          compressed-mode trigger-marker limitations, and a board serial-port
+          handling quirk addressed by the launch script.
+        </p>
+        <p>
+          FPGA utilization reached 17% of LUTs and 23% of slices while using all
+          32 block RAMs, with 100 MHz timing met on the documented build.
+        </p>
+      </section>
+
+      <section>
+        <p class="eyebrow">Verification</p>
+        <h2>Repeatable tests and an external signal source</h2>
+        <p>
+          The repository includes an Icarus Verilog simulation workflow,
+          reusable bench test code, STM32-based waveform generation,
+          FPGA build scripts for Xilinx ISE, and host-side load/launch utilities.
+          These separate logic verification from end-to-end measurements
+          made on the real Mojo and STM32 boards.
+        </p>
+        <div class="card-links">
+          <a href="https://github.com/firefly-haven/mojo-v2-logic-analyzer/tree/main/bench" target="_blank" rel="noreferrer">Bench tests ↗</a>
+          <a href="https://github.com/firefly-haven/mojo-v2-logic-analyzer/tree/main/ise_la" target="_blank" rel="noreferrer">FPGA RTL ↗</a>
+          <a href="https://github.com/firefly-haven/mojo-v2-logic-analyzer/tree/main/stm32_test" target="_blank" rel="noreferrer">STM32 test firmware ↗</a>
+        </div>
+      </section>
+
+      <section>
+        <p class="eyebrow">Next iteration · not yet built</p>
+        <h2>Protected inputs and deeper captures</h2>
+        <p>
+          I’m exploring an expansion shield with 1.8–5 V input-level support,
+          overvoltage protection, additional channels, PSRAM capture storage,
+          and a faster FT232H-based readout. The shield is currently an
+          architecture and bench-simulation effort: no schematic, PCB, or
+          shield hardware has been completed or validated yet.
+        </p>
+        <div class="card-links">
+          <a href="https://github.com/firefly-haven/mojo-v2-logic-analyzer/blob/main/shield/DESIGN.md" target="_blank" rel="noreferrer">Shield design notes ↗</a>
+          <a href="https://github.com/firefly-haven/mojo-v2-logic-analyzer/blob/main/bench/README.md" target="_blank" rel="noreferrer">Unverified bench plan ↗</a>
+        </div>
+      </section>
+    </article>
+  </main>
+</body>
+</html>
